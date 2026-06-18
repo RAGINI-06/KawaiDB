@@ -43,6 +43,26 @@ public class SqlParser {
 
             db.insertRow(tableName, values);
         }
+        else if (sql.toUpperCase().contains("WHERE")) {
+
+            String tableName =
+                    sql.substring(
+                            sql.toUpperCase().indexOf("FROM") + 4,
+                            sql.toUpperCase().indexOf("WHERE")
+                    ).trim();
+
+            String condition =
+                    sql.substring(
+                            sql.toUpperCase().indexOf("WHERE") + 5
+                    ).trim();
+
+            String[] parts = condition.split("=");
+
+            String column = parts[0].trim();
+            String value = parts[1].trim();
+
+            db.selectWhere(tableName, column, value);
+        }
         else if (sql.toUpperCase().startsWith("SELECT")) {
 
             String tableName =
