@@ -46,4 +46,30 @@ public class Database {
 
         System.out.println(table.getRows());
     }
+    public void selectAll(String tableName) {
+
+        Table table = tables.get(tableName);
+
+        if (table == null) {
+            System.out.println("Table not found.");
+            return;
+        }
+
+        // Print columns
+        for (String column : table.getColumns()) {
+            System.out.print(column + "\t");
+        }
+
+        System.out.println();
+
+        // Print rows
+        for (var row : table.getRows()) {
+
+            for (String value : row) {
+                System.out.print(value + "\t");
+            }
+
+            System.out.println();
+        }
+    }
 }

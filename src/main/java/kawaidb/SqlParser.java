@@ -43,6 +43,15 @@ public class SqlParser {
 
             db.insertRow(tableName, values);
         }
+        else if (sql.toUpperCase().startsWith("SELECT")) {
+
+            String tableName =
+                    sql.substring(
+                            sql.toUpperCase().indexOf("FROM") + 4
+                    ).trim();
+
+            db.selectAll(tableName);
+        }
         else {
             System.out.println("Unknown command.");
         }
