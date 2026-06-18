@@ -27,6 +27,22 @@ public class SqlParser {
 
             db.createTable(tableName, columns);
         }
+        else if (sql.toUpperCase().startsWith("INSERT INTO")) {
+
+            String tableName =
+                    sql.split(" ")[2];
+
+            String valuesPart =
+                    sql.substring(
+                            sql.indexOf("(") + 1,
+                            sql.lastIndexOf(")")
+                    );
+
+            List<String> values =
+                    Arrays.asList(valuesPart.split(","));
+
+            db.insertRow(tableName, values);
+        }
         else {
             System.out.println("Unknown command.");
         }

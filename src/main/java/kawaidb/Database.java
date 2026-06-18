@@ -27,4 +27,23 @@ public class Database {
     public Table getTable(String tableName) {
         return tables.get(tableName);
     }
+    public void insertRow(String tableName, List<String> values) {
+
+        Table table = tables.get(tableName);
+
+        if (table == null) {
+            System.out.println("Table not found.");
+            return;
+        }
+
+        table.insertRow(values);
+
+        System.out.println("1 row inserted.");
+    }
+    public void printTableInfo(String tableName) {
+
+        Table table = tables.get(tableName);
+
+        System.out.println(table.getRows());
+    }
 }
