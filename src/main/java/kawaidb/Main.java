@@ -2,6 +2,8 @@ package kawaidb;
 
 //public class Main {
 //}
+
+
 import java.util.Scanner;
 
 public class Main {
@@ -10,21 +12,21 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        Database db = new Database();
+
         System.out.println("Welcome to KawaiiDB!");
-        System.out.println("Type EXIT to quit.");
 
         while (true) {
 
             System.out.print("kawaiidb> ");
 
-            String command = scanner.nextLine();
+            String sql = scanner.nextLine();
 
-            if (command.equalsIgnoreCase("EXIT")) {
-                System.out.println("Goodbye!");
+            if (sql.equalsIgnoreCase("EXIT")) {
                 break;
             }
 
-            System.out.println("You entered: " + command);
+            SqlParser.execute(sql, db);
         }
 
         scanner.close();
