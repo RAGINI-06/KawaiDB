@@ -5,6 +5,13 @@ package kawaidb;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class StorageManager {
 
     private static final String DATA_DIR = "data";
@@ -17,21 +24,28 @@ public class StorageManager {
         }
     }
 
-    public static void createTableFile(String tableName) {
+    public static void createTableFile(
+            String tableName,
+            List<String> columns) {
 
         try {
 
-            File file =
-                    new File(DATA_DIR + "/" +
-                            tableName + ".tbl");
+            FileWriter writer =
+                    new FileWriter(
+                            DATA_DIR + "/" +
+                                    tableName + ".tbl");
 
-            file.createNewFile();
+            writer.write(
+                    String.join(",", columns)
+                            + "\n");
+
+            writer.close();
 
         } catch (IOException e) {
-
             e.printStackTrace();
         }
     }
+
     public static void appendRow(
             String tableName,
             String rowData) {
@@ -52,5 +66,107 @@ public class StorageManager {
 
             e.printStackTrace();
         }
+    }
+
+    public static List<String> getTableNames() {
+
+        List<String> tableNames = new java.util.ArrayList<>();
+
+        File folder = new File(DATA_DIR);
+
+        File[] files = folder.listFiles();
+
+        if (files == null) {
+            return tableNames;
+        }
+
+        for (File file : files) {
+
+            String fileName = file.getName();
+
+            if (fileName.endsWith(".tbl")) {
+
+                String tableName =
+                        fileName.substring(
+                                0,
+                                fileName.length() - 4
+                        );
+
+                tableNames.add(tableName);
+            }
+        }
+
+        return tableNames;
+    }
+
+    public static List<String> readAllLines(
+            String tableName) {
+
+        try {
+
+            return Files.readAllLines(
+                    Paths.get(
+                            DATA_DIR + "/" +
+                                    tableName + ".tbl"
+                    ));
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+
+    public static Table loadTable(
+            String tableName) {
+
+        List<String> lines =
+                readAllLines(tableName);
+
+        if (lines.isEmpty()) {
+            return null;
+        }
+
+        List<String> columns =
+                Arrays.asList(
+                        lines.get(0).split(",")
+                );
+
+        Schema schema = new Schema();
+
+        for (String column : columns) {
+            schema.addColumn(
+                    column,
+                    DataType.STRING
+            );
+        }
+
+        Table table =
+                new Table(
+                        tableName,
+                        schema
+                );
+
+        for (int i = 1; i < lines.size(); i++) {
+
+            String[] values =
+                    lines.get(i).split(",");
+
+            Row row = new Row();
+
+            for (int j = 0; j < columns.size(); j++) {
+
+                row.setValue(
+                        columns.get(j),
+                        values[j]
+                );
+            }
+
+            table.insertRow(row);
+        }
+
+        return table;
     }
 }

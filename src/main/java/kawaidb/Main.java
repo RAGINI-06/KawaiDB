@@ -14,6 +14,8 @@ public class Main {
 
         Database db = new Database();
 
+
+        db.loadAllTables();
         System.out.println("Welcome to KawaiiDB!");
 
         while (true) {
