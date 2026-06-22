@@ -10,6 +10,8 @@ public class SqlParser {
     public static void execute(String sql, Database db) {
 
         sql = sql.trim();
+        String[] tokens = sql.split(" ");
+        String command = tokens[0].toUpperCase();
 
         if (sql.toUpperCase().startsWith("CREATE TABLE")) {
 
@@ -71,6 +73,39 @@ public class SqlParser {
                     ).trim();
 
             db.selectAll(tableName);
+        }
+        else if (command.equals("DELETE")) {
+
+            if (tokens.length < 4) {
+                System.out.println("Usage: DELETE tableName column value");
+                return;
+            }
+
+            String tableName = tokens[1];
+            String column = tokens[2];
+            String value = tokens[3];
+
+            db.deleteWhere(
+                    tableName,
+                    column,
+                    value
+            );
+        }
+        else if (command.equals("UPDATE")) {
+
+            String tableName = tokens[1];
+            String targetColumn = tokens[2];
+            String newValue = tokens[3];
+            String whereColumn = tokens[4];
+            String whereValue = tokens[5];
+
+            db.updateWhere(
+                    tableName,
+                    whereColumn,
+                    whereValue,
+                    targetColumn,
+                    newValue
+            );
         }
         else {
             System.out.println("Unknown command.");

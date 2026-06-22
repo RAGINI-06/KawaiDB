@@ -16,6 +16,11 @@ public class Main {
 
 
         db.loadAllTables();
+//        db.deleteWhere(
+//                "students",
+//                "id",
+//                "2"
+//        );
         System.out.println("Welcome to KawaiiDB!");
 
         while (true) {
@@ -33,4 +38,5 @@ public class Main {
 
         scanner.close();
     }
+
 }

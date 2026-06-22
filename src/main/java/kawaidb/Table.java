@@ -46,4 +46,48 @@ public class Table {
 
         return names;
     }
+
+    public boolean deleteRow(
+            String column,
+            String value) {
+
+        int columnIndex =
+                getColumns().indexOf(column);
+
+        if (columnIndex == -1) {
+            return false;
+        }
+
+        for (int i = 0; i < rows.size(); i++) {
+
+            Row row = rows.get(i);
+
+            if (row.getValue(column)
+                    .equals(value)) {
+
+                rows.remove(i);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean updateRow(
+            String whereColumn,
+            String whereValue,
+            String targetColumn,
+            String newValue) {
+
+        for (Row row : rows) {
+
+            if (row.getValue(whereColumn).equals(whereValue)) {
+
+                row.setValue(targetColumn, newValue);
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -169,4 +169,47 @@ public class StorageManager {
 
         return table;
     }
+    public static void rewriteTable(Table table) {
+
+        try {
+
+            FileWriter writer =
+                    new FileWriter(
+                            DATA_DIR + "/" +
+                                    table.getName() +
+                                    ".tbl"
+                    );
+
+            writer.write(
+                    String.join(
+                            ",",
+                            table.getColumns()
+                    ) + "\n"
+            );
+
+            for (Row row : table.getRows()) {
+
+                List<String> values =
+                        new ArrayList<>();
+
+                for (String column :
+                        table.getColumns()) {
+
+                    values.add(
+                            row.getValue(column)
+                    );
+                }
+
+                writer.write(
+                        String.join(",", values)
+                                + "\n"
+                );
+            }
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
